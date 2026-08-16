@@ -1,0 +1,12 @@
+[project]
+name = "xiaozhi-music-mcp"
+version = "0.1.0"
+description = "Vietnamese Music MCP Server for Xiaozhi"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp",
+    "requests"
+]
+
+[project.scripts]
+xiaozhi-music-mcp = "server:main"
