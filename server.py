@@ -12,20 +12,25 @@ mcp = FastMCP("Xiaozhi Music")
 
 @mcp.tool()
 def search_music(query: str) -> dict:
-    """Search Vietnamese music by title, artist, album or genre."""
+    """
+    Search Vietnamese music by song title, artist, album or genre.
+    """
 
     try:
         response = requests.get(
             MUSIC_API_URL,
-            params={
-                "q": query
-            },
+            params={"q": query},
             timeout=15
         )
 
         response.raise_for_status()
-
         return response.json()
+
+    except requests.RequestException as e:
+        return {
+            "success": False,
+            "error": f"Music API error: {str(e)}"
+        }
 
     except Exception as e:
         return {
@@ -36,35 +41,15 @@ def search_music(query: str) -> dict:
 
 @mcp.tool()
 def get_song(title: str) -> dict:
-    """Find a specific song by title."""
+    """
+    Search for a specific Vietnamese song by title.
+    """
 
-    try:
-        response = requests.get(
-            MUSIC_API_URL,
-            params={
-                "q": title
-            },
-            timeout=15
-        )
-
-        response.raise_for_status()
-
-        data = response.json()
-
-        if not data.get("success"):
-            return data
-
-        return data
-
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
+    return search_music(title)
 
 
 def main():
-    mcp.run()
+    mcp.run(transport="stdio")
 
 
 if __name__ == "__main__":
