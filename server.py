@@ -7,6 +7,8 @@ MUSIC_API_URL = os.environ.get(
     "https://hungtran.lovestoblog.com/xiaozhi-music/api/search.php"
 )
 
+MUSIC_API_KEY = os.environ.get("MUSIC_API_KEY", "1412190628013011")
+
 mcp = FastMCP("Xiaozhi Music")
 
 
@@ -14,10 +16,17 @@ mcp = FastMCP("Xiaozhi Music")
 def search_music(query: str) -> dict:
     """Search Vietnamese music by title, artist, album or genre."""
 
+    if not MUSIC_API_KEY:
+        return {
+            "success": False,
+            "error": "MUSIC_API_KEY is missing"
+        }
+
     try:
         response = requests.get(
             MUSIC_API_URL,
             params={
+                "key": MUSIC_API_KEY,
                 "q": query
             },
             timeout=15
@@ -26,35 +35,6 @@ def search_music(query: str) -> dict:
         response.raise_for_status()
 
         return response.json()
-
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
-
-
-@mcp.tool()
-def get_song(title: str) -> dict:
-    """Find a specific song by title."""
-
-    try:
-        response = requests.get(
-            MUSIC_API_URL,
-            params={
-                "q": title
-            },
-            timeout=15
-        )
-
-        response.raise_for_status()
-
-        data = response.json()
-
-        if not data.get("success"):
-            return data
-
-        return data
 
     except Exception as e:
         return {
