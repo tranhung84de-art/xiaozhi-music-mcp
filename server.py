@@ -7,7 +7,7 @@ MUSIC_API_URL = os.environ.get(
     "https://hungtran.lovestoblog.com/xiaozhi-music/api/search.php"
 )
 
-MUSIC_API_KEY = os.environ.get("MUSIC_API_KEY", "1412190628013011")
+MUSIC_API_KEY = os.environ.get("MUSIC_API_KEY", "")
 
 mcp = FastMCP("Xiaozhi Music")
 
